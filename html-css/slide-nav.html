@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: #eee;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .slide {
+        width: 234px;
+        height: 420px;
+        background-color: rgba(105, 101, 101, 0.6);
+        padding: 20px 0;
+        margin: 100px;
+        /* 给绝对定位的子元素 .slide-list 当 “定位参照物”。
+        在 CSS 中，使用 position: absolute; 的元素（这里是 .slide-list），其定位参考不是默认的浏览器视口，
+        而是最近的、已定位的祖先元素（即设置了 position: relative/absolute/fixed/sticky 的祖先）。 */
+        position: relative;
+      }
+      .slide ul {
+        list-style: none;/* 去掉默认的列表样式（如圆点） */
+      }
+      .slide ul li {
+        width: 100%;
+        height: 42px;
+        line-height: 42px; /* 行高等于高度，让文字垂直居中 */
+        text-align: left;
+        padding-left: 30px;
+        box-sizing: border-box;/* 盒模型包含padding/border，避免宽度超出 */
+      }
+      .slide ul li a {
+        /* 虽然能继承 <li> 的 line-height: 42px 实现文字垂直居中，但点击区域只有文字本身（比如 “手机” 两个字的范围）。
+            无法设置 width/height，如果想让整个 <li> 区域都能点击，纯 inline 做不到。 */
+        display: inline-block;
+        text-decoration: none;
+        color: #fff;
+      }
+      .slide ul li:hover {
+        background-color: #ff6700;
+      }
+      .slide-list{
+        width: 992px;
+        height: 460px;
+        background-color: #fff;
+        position: absolute;
+        top: 0;
+        left: 234px;
+        border: 1px solid #e0e0e0;
+        border-left: none;
+        box-shadow:0px 8px 16px rgba(0,0,0,0.18);
+        display: none;
+      }
+      .slide ul li:hover > .slide-list{
+        display:block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide">
+      <ul>
+        <li>
+          <a href="#">手机</a>
+          <div class="slide-list">小米1</div>
+        </li>
+        <li>
+          <a href="#">电视</a>
+          <div class="slide-list">小米2</div>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
