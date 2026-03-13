@@ -65,6 +65,7 @@
   left: 50%;
   margin-left: -62px;
   overflow: hidden;
+  z-index: 10;
 }
 .download img {
   width: 90px;
@@ -120,6 +121,7 @@
   color: #424242;
   overflow: hidden;
   line-height: 100px;
+  z-index: 10;
 }
 .cart:hover > .cart-list {
   height: 100px;
