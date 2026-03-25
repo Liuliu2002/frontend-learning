@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        img{
+            vertical-align: top;
+            width: 100%;
+            height: 100%;
+        }
+        ul{
+            list-style: none;
+        }
+        .outer{
+            width: 640px;
+            height: 390px;
+            margin: 100px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .img-list li{
+            position: absolute;
+            width: 100%;  /* 修复：li宽度和父容器一致 */
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        li.current{
+            z-index: 1;
+            opacity: 1;
+        }
+        .prevbtn, .nextbtn{
+            width: 50px;
+            height: 50px;
+            border: white solid 5px;
+            border-right: none;
+            border-bottom: none;
+            /* top: 50%;
+            transform: translateY(-50%); 他们两个组合实现完美居中*/
+            position: absolute;
+            top: 50%;
+            z-index: 10;
+            cursor: pointer;
+            background: transparent; 
+            opacity: 0.5;
+            box-sizing: border-box;
+        }
+        .prevbtn:hover, .nextbtn:hover{
+            opacity:1;
+        }
+        .prevbtn{
+            /* 必须先移动后选择，位置不能反，transform是从左往右执行 */
+            transform: translateY(-50%) rotate(-45deg);
+            left: 20px;
+        }
+        .nextbtn{
+            transform: translateY(-50%)  rotate(135deg);
+            right: 20px;
+        }
+        .dot{
+            position: absolute;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            margin: auto;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+        }
+        .dot a{
+            float: left;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: white;
+            margin: 5px;
+            opacity: 0.5;
+        }
+        .dot a:hover,.dot .active{
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer">
+        <ul class="img-list">
+            <li class="current">
+                <a href="#">
+                    <img src="./images/1.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/2.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/3.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/4.png">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="./images/5.png">
+                </a>
+            </li>
+        </ul>
+        <div>
+            <div class="prevbtn"></div>
+            <div class="nextbtn"></div>
+        </div>
+        <div class="dot">
+            <a class="active" href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+            <a href="javascript:;"></a>
+        </div>
+    </div>
+    <script>
+        // const list = document.querySelectorAll(".img-list li")
+        // let index = 0
+        // setTimeout(function auto(){
+        //     list[index].classList.remove("current")
+        //     index = (index  + 1) % list.length
+        //     list[index].classList.add("current")
+        //     setTimeout(auto,3000)
+        // },3000)
+
+
+        const prevbtn = document.getElementsByClassName("prevbtn")[0]
+        const nextbtn = document.getElementsByClassName("nextbtn")[0]
+
+        const outer = document.getElementsByClassName("outer")[0]
+
+        const dots = Array.from(document.querySelectorAll(".dot a"))
+        const imgArr = document.querySelectorAll(".img-list li")
+
+        function changeImg(dir){
+            const current = document.querySelector(".img-list .current")
+            let next
+            if(dir === "prev"){
+                next = current.previousElementSibling || document.querySelector(".img-list li:last-child")
+            }else if(dir === "next"){
+                next = current.nextElementSibling || document.querySelector(".img-list li")
+            }else if(typeof dir === "number"){
+                next = imgArr[dir]
+            }
+            current.classList.remove("current")
+            next.classList.add("current")
+            const currentActive = document.querySelector(".active")
+            currentActive.classList.remove("active")
+            const index = Array.from(imgArr).indexOf(next)
+            dots[index].classList.add("active")
+        }
+
+        const toggleChange = (() => {
+            let timer = null
+            return () =>{
+                if(timer === null){
+                    timer = setTimeout(function auto(){
+                        changeImg("next")
+                        timer = setTimeout(auto,3000)
+                    },3000)
+                }else{
+                    clearTimeout(timer)
+                    timer = null
+                }
+            }
+        })()
+
+        toggleChange()
+        nextbtn.addEventListener("click",() =>{
+            changeImg("next")
+        })
+        prevbtn.addEventListener("click",() => {
+            changeImg("prev")
+        })
+        outer.onmouseenter = () => {
+            toggleChange()
+        }
+        outer.onmouseleave = () => {
+            toggleChange()
+        }
+
+        document.addEventListener("click",(event) => {
+            const index = dots.indexOf(event.target)
+            if(index !== -1){
+                
+                changeImg(index)
+            }
+        })
+    </script>
+</body>
+</html>
