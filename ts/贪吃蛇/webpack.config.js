@@ -62,9 +62,6 @@ module.exports = {
     // 配置Webpack插件
     plugins: [
         new CleanWebpackPlugin(),
-        new HTMLWebpackPlugin({
-            // 根据模板生成html网页
-            template: "./src/index.html"
-        }),
+        new HTMLWebpackPlugin(),
     ],
 }
