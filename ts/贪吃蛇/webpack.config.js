@@ -26,7 +26,7 @@ module.exports = {
 
     // 配置模块解析，让webpack能识别ts、js后缀文件
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js', '.less']
     },
 
     // 指定webpack打包时候使用的模块
@@ -55,13 +55,38 @@ module.exports = {
                 },'ts-loader'],
                 // 指定要排除的文件
                 exclude: /node_modules/
+            },
+            {
+                test:/\.less$/,
+                use:[
+                    "style-loader",
+                    "css-loader",
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            postcssOptions:{
+                                plugins:[
+                                    [
+                                        "postcss-preset-env",
+                                        {
+                                            browsers:'last 2 versions'
+                                        }
+                                    ]
+                                ]
+                            }
+                        }
+                    },
+                    "less-loader"
+                ]
             }
         ]
     },
 
     // 配置Webpack插件
     plugins: [
-        new CleanWebpackPlugin(),
-        new HTMLWebpackPlugin(),
-    ],
+    new CleanWebpackPlugin(),
+    new HTMLWebpackPlugin({
+        template: "./src/index.html"  // 👈 就加这一行！
+    }),
+],
 }
